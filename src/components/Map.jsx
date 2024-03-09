@@ -1,6 +1,7 @@
 import "../App.css";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-markercluster/dist/styles.min.css";
+import "leaflet-polylinedecorator";
 import { useEffect, useState } from "react";
 
 import osmtogeojson from "osmtogeojson";
@@ -25,7 +26,7 @@ function MapEvents({ roads, setRoads }) {
 
   const updateRoads = (e) => {
     var zoom = e.target._zoom;
-    if (zoom >= 15) {
+    if (zoom >= 17) {
       const bounds = map.getBounds();
 
       const overpassQuery = `[out:json][timeout:25];
@@ -51,14 +52,41 @@ function MapEvents({ roads, setRoads }) {
             pointsArr[0][0] < pointsArr[pointsArr.length - 1][0]
               ? "forward"
               : "backward";
-          // console.log(road.properties);
+          // if (
+          //   road.properties.id == "way/383071112" ||
+          //   road.properties.id == "way/173146363"
+          // )
+          //   console.log(road);
           pointsArr.map((p) => {
             if (p) pointList.push([p[1], p[0]]);
           });
 
-          L.polyline(pointList, {
-            color: road.properties.oneway != "yes" ? "black" : "lime",
+          var line = L.polyline(pointList, {
+            color:
+              road.properties.oneway != "yes"
+                ? "black"
+                : direction == "forward"
+                ? "lime"
+                : "red",
           }).addTo(map);
+
+          var popup = L.popup().setContent(`ID: ${road.properties.id}`);
+
+          line.bindPopup(popup);
+
+          if (road.properties.oneway == "yes")
+            L.polylineDecorator(line, {
+              patterns: [
+                {
+                  offset: 25,
+                  repeat: "50px",
+                  symbol: L.Symbol.arrowHead({
+                    pixelSize: 15,
+                    pathOptions: { color: "blue", fillOpacity: 1, weight: 0 },
+                  }),
+                },
+              ],
+            }).addTo(map);
 
           // _roads.push(
           //   <Polyline
