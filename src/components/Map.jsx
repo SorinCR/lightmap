@@ -134,6 +134,13 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
     fetch(uri, { method: "POST", body: q }).then(async (res) => {
       let geoJSONData = osmtogeojson(await res.json());
 
+      map.panTo(
+        new L.LatLng(
+          (northEast.lat + southWest.lat) / 2,
+          (northEast.lng + southWest.lng) / 2
+        )
+      );
+
       let _roads = [];
       geoJSONData.features.map((road) => {
         let pointsArr = road.geometry.coordinates;
@@ -155,8 +162,9 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
               ? "lime"
               : "red",
         }).addTo(map);
-
-        var popup = L.popup().setContent(`ID: ${road.properties.id}`);
+        var popup = L.popup().setContent(
+          `${road.properties.name}<br>Lanes:${road.properties.lanes}<br>Max Speed:${road.properties.maxspeed}`
+        );
 
         line.bindPopup(popup);
 
@@ -235,9 +243,13 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
   return null;
 }
 
-export default function Map({ tile, selectAreaMode, setSelectAreaMode }) {
-  const [roads, setRoads] = useState([]);
-
+export default function Map({
+  tile,
+  selectAreaMode,
+  setSelectAreaMode,
+  roads,
+  setRoads,
+}) {
   const tiles = {
     traffic:
       "https://{s}.google.com/vt?lyrs=h@159000000,traffic|seconds_into_week:-1&style=3&x={x}&y={y}&z={z}",

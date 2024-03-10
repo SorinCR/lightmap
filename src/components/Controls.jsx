@@ -1,8 +1,15 @@
 import ReactDOM from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { faLayerGroup, faCropSimple } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLayerGroup,
+  faCropSimple,
+  faTrafficLight,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { Layer } from "leaflet";
+
+import { useMap } from "react-leaflet";
 
 function LayerChanger({ tile, setTile }) {
   return (
@@ -45,8 +52,49 @@ function LayerChanger({ tile, setTile }) {
   );
 }
 
-function ActionMenu() {
-  return;
+function ActionMenu({ tile }) {
+  return (
+    <div className="flex flex-col">
+      <div
+        className={
+          tile == "sattelite"
+            ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+            : "bg-[rgba(0,0,0,0.4)] hover:bg-[rgba(0,0,0,0.5)] text-white cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+        }
+      >
+        <FontAwesomeIcon icon={faTrafficLight} />
+      </div>
+    </div>
+  );
+}
+
+function CropButton({
+  selectAreaMode,
+  setSelectAreaMode,
+  tile,
+  editing,
+  setEditing,
+}) {
+  return (
+    <div
+      onClick={() => {
+        if (!editing) {
+          setSelectAreaMode(true);
+          setEditing(true);
+        } else {
+          setEditing(false);
+          setSelectAreaMode(false);
+        }
+      }}
+      className={
+        tile == "sattelite"
+          ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+          : "bg-[rgba(0,0,0,0.4)] hover:bg-[rgba(0,0,0,0.5)] text-white cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+      }
+    >
+      <FontAwesomeIcon icon={!editing ? faCropSimple : faXmark} />
+    </div>
+  );
 }
 
 export default function Controls({
@@ -54,22 +102,20 @@ export default function Controls({
   setTile,
   selectAreaMode,
   setSelectAreaMode,
+  editing,
+  setEditing,
 }) {
   return (
-    <div className="absolute h-full left-0 w-20 flex items-start justify-center pt-10">
+    <div className="absolute h-full left-0 w-20 flex items-start justify-start gap-5 pt-10 flex-col">
       <LayerChanger tile={tile} setTile={setTile} />
-      <div
-        onClick={() => {
-          setSelectAreaMode(!selectAreaMode);
-        }}
-        className={
-          tile == "sattelite"
-            ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full"
-            : "bg-[rgba(0,0,0,0.4)] hover:bg-[rgba(0,0,0,0.5)] text-white cursor-pointer w-10 h-10 flex justify-center items-center rounded-full"
-        }
-      >
-        <FontAwesomeIcon icon={faCropSimple} />
-      </div>
+      <CropButton
+        setSelectAreaMode={setSelectAreaMode}
+        selectAreaMode={selectAreaMode}
+        tile={tile}
+        editing={editing}
+        setEditing={setEditing}
+      />
+      {editing ? <ActionMenu tile={tile} /> : <></>}
     </div>
   );
 }
