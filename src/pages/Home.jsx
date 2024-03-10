@@ -12,12 +12,24 @@ export default function Home() {
       <div className="w-full h-full absolute flex justify-center items-center">
         <div className="w-full h-full gradientbg flex">
           <div className="w-full"></div>
-          <div className="w-full h-full p-24 flex flex-col justify-center items-start text-white">
-            <h1 className="text-5xl">LightMap</h1>
-            <p>It's possible because of you!</p>
+          <div className="w-full h-full p-24 flex flex-col gap-10 justify-center items-start text-white">
+            <div className="w-full">
+              <h1 className="text-5xl mb-2">LightMap</h1>
+              <p>It's possible because of you!</p>
+            </div>
             <div className="flex w-full flex justify-start items-center gap-10">
-              <a href="/enlighten">Create your project</a>
-              <a href="#">Continue your work(not possible)</a>
+              <a
+                href="/enlighten"
+                className="px-4 py-2 border-white border-2 rounded-sm hover:bg-[rgba(255,255,255,0.1)]"
+              >
+                Create your project
+              </a>
+              <a
+                href="#"
+                className="px-4 py-2 border-white border-2 rounded-sm hover:bg-[rgba(255,255,255,0.1)]"
+              >
+                Continue your work(not possible)
+              </a>
             </div>
           </div>
         </div>
