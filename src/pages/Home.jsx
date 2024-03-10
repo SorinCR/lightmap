@@ -15,7 +15,11 @@ export default function Home() {
           <div className="w-full h-full p-24 flex flex-col gap-10 justify-center items-start text-white">
             <div className="w-full">
               <h1 className="text-5xl mb-2">LightMap</h1>
-              <p>It's possible because of you!</p>
+              <p>
+                Solving <span className="text-red-500">tom</span>
+                <span className="text-orange-500">mor</span>
+                <span className="text-green-500">ow's</span> problems!
+              </p>
             </div>
             <div className="flex w-full flex justify-start items-center gap-10">
               <a

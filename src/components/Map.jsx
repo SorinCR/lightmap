@@ -19,10 +19,20 @@ import {
 
 import L, { point } from "leaflet";
 
-function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
+function MapEvents({
+  roads,
+  setRoads,
+  selectAreaMode,
+  setSelectAreaMode,
+  semaphore,
+}) {
   const map = useMap();
 
+  const [intersections, setIntersections] = useState({});
+
   const colors = ["lime", "white", "blue", "red", "green", "pink"];
+
+  useEffect(() => {}, [semaphore]);
 
   if (selectAreaMode) {
     map.dragging.disable();
@@ -65,8 +75,16 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
           )
             console.log(road);
           pointsArr.map((p) => {
-            if (p) pointList.push([p[1], p[0]]);
+            if (p) {
+              pointList.push([p[1], p[0]]);
+              let _intersections = [];
+              let commonPointCount = _intersections[[p[1], p[0]]] || 0;
+              _intersections[[p[1], p[0]]] = commonPointCount + 1;
+              setIntersections([..._intersections]);
+            }
           });
+
+          console.log(intersections);
 
           var line = L.polyline(pointList, {
             color:
@@ -249,6 +267,7 @@ export default function Map({
   setSelectAreaMode,
   roads,
   setRoads,
+  semaphore,
 }) {
   const tiles = {
     traffic:
@@ -273,6 +292,7 @@ export default function Map({
           setRoads={setRoads}
           selectAreaMode={selectAreaMode}
           setSelectAreaMode={setSelectAreaMode}
+          semaphore={semaphore}
         />
         {roads}
         <TileLayer

@@ -13,6 +13,9 @@ add_executable(lightmap_cv main.cpp
         include/image_buffer.h
         include/camera_executor.h
         include/camera_executor.cpp
+        include/my_blob.h
+        include/my_blob.cpp
+        include/helper.h
 )
 
 set(OpenCV_LIBS opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs)

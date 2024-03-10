@@ -21,6 +21,10 @@ function Enlighten() {
   const [selectAreaMode, setSelectAreaMode] = useState(false);
   const [editing, setEditing] = useState(false);
   const [roads, setRoads] = useState([]);
+  const [clearRoutes, setClearRoutes] = useState(() => {});
+  const [semaphore, toogleSemaphore] = useState(false);
+  const [weight, toogleWeight] = useState(false);
+  const [camera, toogleCamera] = useState(false);
 
   return (
     <div className="w-full h-full flex items-center justify-center flex-col relative">
@@ -30,6 +34,8 @@ function Enlighten() {
         setSelectAreaMode={setSelectAreaMode}
         roads={roads}
         setRoads={setRoads}
+        setClearRoutes={setClearRoutes}
+        semaphore={semaphore}
       />
       <Controls
         tile={tile}
@@ -38,6 +44,8 @@ function Enlighten() {
         setSelectAreaMode={setSelectAreaMode}
         editing={editing}
         setEditing={setEditing}
+        clearRoutes={clearRoutes}
+        toogleSemaphore={toogleSemaphore}
       />
     </div>
   );

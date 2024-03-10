@@ -6,6 +6,8 @@ import {
   faCropSimple,
   faTrafficLight,
   faXmark,
+  faWeightScale,
+  faCamera,
 } from "@fortawesome/free-solid-svg-icons";
 import { Layer } from "leaflet";
 
@@ -52,10 +54,11 @@ function LayerChanger({ tile, setTile }) {
   );
 }
 
-function ActionMenu({ tile }) {
+function ActionMenu({ tile, toogleSemaphore }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-5">
       <div
+        onClick={() => toogleSemaphore(true)}
         className={
           tile == "sattelite"
             ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
@@ -63,6 +66,24 @@ function ActionMenu({ tile }) {
         }
       >
         <FontAwesomeIcon icon={faTrafficLight} />
+      </div>
+      <div
+        className={
+          tile == "sattelite"
+            ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+            : "bg-[rgba(0,0,0,0.4)] hover:bg-[rgba(0,0,0,0.5)] text-white cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+        }
+      >
+        <FontAwesomeIcon icon={faWeightScale} />
+      </div>
+      <div
+        className={
+          tile == "sattelite"
+            ? "bg-[rgba(255,255,255,0.4)] hover:bg-[rgba(255,255,255,0.5)] text-[#030303] cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+            : "bg-[rgba(0,0,0,0.4)] hover:bg-[rgba(0,0,0,0.5)] text-white cursor-pointer w-10 h-10 flex justify-center items-center rounded-full ml-5"
+        }
+      >
+        <FontAwesomeIcon icon={faCamera} />
       </div>
     </div>
   );
@@ -74,6 +95,7 @@ function CropButton({
   tile,
   editing,
   setEditing,
+  clearRoutes,
 }) {
   return (
     <div
@@ -84,6 +106,7 @@ function CropButton({
         } else {
           setEditing(false);
           setSelectAreaMode(false);
+          window.location.reload();
         }
       }}
       className={
@@ -104,6 +127,8 @@ export default function Controls({
   setSelectAreaMode,
   editing,
   setEditing,
+  clearRoutes,
+  toogleSemaphore,
 }) {
   return (
     <div className="absolute h-full left-0 w-20 flex items-start justify-start gap-5 pt-10 flex-col">
@@ -114,8 +139,13 @@ export default function Controls({
         tile={tile}
         editing={editing}
         setEditing={setEditing}
+        clearRoutes={clearRoutes}
       />
-      {editing ? <ActionMenu tile={tile} /> : <></>}
+      {editing ? (
+        <ActionMenu tile={tile} toogleSemaphore={toogleSemaphore} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
