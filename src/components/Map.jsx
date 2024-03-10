@@ -42,6 +42,8 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
       >;
       out skel qt;`;
 
+      console.log(overpassQuery);
+
       var q = "data=" + encodeURIComponent(overpassQuery);
 
       var uri = "https://overpass-api.de/api/interpreter";
@@ -99,14 +101,30 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
   };
 
   const updateRoadsByPoints = (selected) => {
+    let northEast = { lat: -90, lng: -180 };
+    let southWest = { lat: 90, lng: 180 };
+
+    selected.sort((a, b) => b.lat - a.lat);
+
+    for (const point of selected) {
+      // Update northEast
+      northEast.lat = Math.max(northEast.lat, point.lat);
+      northEast.lng = Math.max(northEast.lng, point.lng);
+
+      // Update southWest
+      southWest.lat = Math.min(southWest.lat, point.lat);
+      southWest.lng = Math.min(southWest.lng, point.lng);
+    }
+
     const overpassQuery = `[out:json][timeout:25];
-      (
-        way["highway"~"motorway|trunk|primary|motorway_link|trunk_link|primary_link|unclassified|tertiary|secondary|track|residential|secondary_link|tertiary_link"](${selected[1].lat},${selected[1].lng},${selected[0].lat},${selected[0].lng}); 
+    (
+      way["highway"~"motorway|trunk|primary|motorway_link|trunk_link|primary_link|unclassified|tertiary|secondary|track|residential|secondary_link|tertiary_link"](${southWest.lat},${southWest.lng},${northEast.lat},${northEast.lng}); 
       );
       out body;
       >;
       out skel qt;`;
 
+    // if(selected)
     console.log(overpassQuery);
 
     var q = "data=" + encodeURIComponent(overpassQuery);
@@ -124,11 +142,7 @@ function MapEvents({ roads, setRoads, selectAreaMode, setSelectAreaMode }) {
           pointsArr[0][0] < pointsArr[pointsArr.length - 1][0]
             ? "forward"
             : "backward";
-        if (
-          road.properties.id == "way/496423878" ||
-          road.properties.id == "way/496423875"
-        )
-          console.log(road);
+
         pointsArr.map((p) => {
           if (p) pointList.push([p[1], p[0]]);
         });
