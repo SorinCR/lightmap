@@ -1,7 +1,7 @@
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import "react-leaflet-markercluster/dist/styles.min.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   MapContainer,
@@ -14,13 +14,17 @@ import {
 } from "react-leaflet";
 
 import Map from "./components/Map";
+import Controls from "./components/Controls";
 
 function App() {
   useEffect(() => {}, []);
 
+  const [tile, setTile] = useState("sattelite");
+
   return (
-    <div className="w-full h-full flex items-center justify-center flex-col">
-      <Map />
+    <div className="w-full h-full flex items-center justify-center flex-col relative">
+      <Map tile={tile} />
+      <Controls tile={tile} setTile={setTile} />
     </div>
   );
 }

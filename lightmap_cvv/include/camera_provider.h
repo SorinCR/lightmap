@@ -16,7 +16,7 @@ public:
 
         std::vector<CameraExecutor> executors; // Vector to hold instances of CameraExecutor
 
-        for (int camera = 0; camera < 4; camera++)
+        for (int camera = 0; camera < 5; camera++)
         {
             executors.emplace_back(camera); // Assuming CameraExecutor has a constructor that takes an int
         }

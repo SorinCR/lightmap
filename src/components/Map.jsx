@@ -52,11 +52,11 @@ function MapEvents({ roads, setRoads }) {
             pointsArr[0][0] < pointsArr[pointsArr.length - 1][0]
               ? "forward"
               : "backward";
-          // if (
-          //   road.properties.id == "way/383071112" ||
-          //   road.properties.id == "way/173146363"
-          // )
-          //   console.log(road);
+          if (
+            road.properties.id == "way/496423878" ||
+            road.properties.id == "way/496423875"
+          )
+            console.log(road);
           pointsArr.map((p) => {
             if (p) pointList.push([p[1], p[0]]);
           });
@@ -69,6 +69,23 @@ function MapEvents({ roads, setRoads }) {
                 ? "lime"
                 : "red",
           }).addTo(map);
+
+          // if (road.properties.lanes > 1) {
+          //   const geometryOffset = 0.000025;
+          //   for (var i = 0; i < pointList.length - 1; i++) {
+          //       pointList[i][0] += geometryOffset;
+          //       pointList[i][1] += geometryOffset;
+          //   }
+
+          //   L.polyline(pointList, {
+          //     color:
+          //       road.properties.oneway != "yes"
+          //         ? "black"
+          //         : direction == "forward"
+          //         ? "lime"
+          //         : "red",
+          //   }).addTo(map);
+          // }
 
           var popup = L.popup().setContent(`ID: ${road.properties.id}`);
 
@@ -116,9 +133,15 @@ function MapEvents({ roads, setRoads }) {
   return null;
 }
 
-export default function Map() {
+export default function Map({ tile }) {
   const [roads, setRoads] = useState([]);
-
+  const tiles = {
+    traffic:
+      "https://{s}.google.com/vt?lyrs=h@159000000,traffic|seconds_into_week:-1&style=3&x={x}&y={y}&z={z}",
+    terrain: "http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
+    streets: "http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}",
+    sattelite: "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+  };
   return (
     <div className="w-full h-full">
       <MapContainer
@@ -134,7 +157,7 @@ export default function Map() {
         {roads}
         <TileLayer
           attribution="Google Maps"
-          url="http://{s}.google.com/vt?lyrs=s&x={x}&y={y}&z={z}"
+          url={tiles[tile]}
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
           maxZoom={20}
         />
